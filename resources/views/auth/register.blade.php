@@ -20,18 +20,20 @@
 <body background="http://orig11.deviantart.net/20eb/f/2015/030/6/f/_minflat__dark_material_design_wallpaper__4k__by_dakoder-d8fjqzu.jpg">
 <div class="login-page">
     <div class="form">
-        <form class="login-form">
-            <input type="text" placeholder="name"/>
-            <input type="text" placeholder="lastname"/>
-            <input type="email" placeholder="email"/>
-            <input type="text" placeholder="phone number"/>
-            <input type="text" placeholder="username"/>
-            <input type="password" placeholder="password"/>
-            <input type="password" placeholder="confirm password"/>
-            <input type="file" placeholder="profile picture"/>
-            <button><span>register</span></button>
-            <p class="message">have a account? <a href={{route('login')}}>login</a></p>
+        <form class="login-form" method="POST" action="{{ route('register.submit') }}" enctype="multipart/form-data">
+            @csrf
+            <input type="text" placeholder="name" name="name" />
+            <input type="text" placeholder="lastname" name="lastname" />
+            <input type="email" placeholder="email" name="email" />
+            <input type="text" placeholder="phone number" name="phone" />
+            <input type="text" placeholder="username" name="username" />
+            <input type="password" placeholder="password" name="password" />
+            <input type="password" placeholder="confirm password" name="password_confirmation" />
+            <input type="file" placeholder="profile picture" name="profile_picture" />
+            <button type="submit"><span>register</span></button>
+            <p class="message">Have an account? <a href="{{ route('login') }}">Login</a></p>
         </form>
+
     </div>
 </div>
 <!-- Bootstrap JavaScript Libraries -->

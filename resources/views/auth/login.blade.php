@@ -20,13 +20,15 @@
 <body background="http://orig11.deviantart.net/20eb/f/2015/030/6/f/_minflat__dark_material_design_wallpaper__4k__by_dakoder-d8fjqzu.jpg">
 <div class="login-page">
     <div class="form">
-        <form class="login-form">
-            <input type="email" placeholder="email"/>
-            <input type="password" placeholder="password"/>
-            <button><span>login</span></button>
+        <form class="login-form" method="POST" action="{{ route('login.submit') }}">
+            @csrf
+            <input type="email" placeholder="email" name="email" />
+            <input type="password" placeholder="password" name="password" />
+            <button type="submit"><span>login</span></button>
             <hr>
-            <p class="message">Not registered? <a href={{route('register')}}>Create an account</a></p>
+            <p class="message">Not registered? <a href="{{ route('register') }}">Create an account</a></p>
         </form>
+
     </div>
 </div>
 <!-- Bootstrap JavaScript Libraries -->

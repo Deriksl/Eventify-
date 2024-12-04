@@ -1,0 +1,55 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f00;
+    color: #fff;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header a {
+    text-decoration: none;
+    color: #fff;
+}
+
+header img {
+    width: 30px;
+    height: 30px;
+}
+
+main {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem;
+}
+
+section {
+    text-align: center;
+}
+
+section a {
+    text-decoration: none;
+    color: inherit; /* Mantiene el color del texto del encabezado */
+}
+
+section img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1rem;
+    cursor: pointer; /* Cambia el cursor a un puntero al pasar el mouse */
+}
+
+section h2 {
+    margin: 0;
+}
