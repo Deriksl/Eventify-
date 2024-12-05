@@ -1,10 +1,8 @@
-<!-- home.blade.php -->
 @extends('layouts.app')
 
-@section('title', 'Eventify')
+@section('title', 'Events')
 
 @section('content')
-    <h1>Eventos</h1>
     <div class="events-grid">
         @for ($i = 1; $i <= 8; $i++)
             <div class="event">
