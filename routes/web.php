@@ -25,6 +25,13 @@ Route::get('/profile', function () {
     return view('profile');
 })->name('profile');
 
+Route::get('/myevents', function () {
+    return view('myevents');
+})->name('myevents');
+
+Route::get('/editmyevent', function () {
+    return view('editmyevent');
+});
 // routes/web.php
 
 

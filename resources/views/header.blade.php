@@ -23,7 +23,7 @@
                     <a class="nav-link text-white" href="{{ route('register') }}" style="font-size: 18px; margin-right: 15px;">Register</a>
 
                     <!-- Tus eventos -->
-                    <a href="#" class="nav-link text-white" style="font-size: 18px; margin-right: 15px;">Tus eventos</a>
+                    <a href="{{ route('myevents') }}" class="nav-link text-white" style="font-size: 18px; margin-right: 15px;">Tus eventos</a>
 
                     <!-- Icono de usuario -->
                     <a href="{{ route('profile') }}" class="nav-link d-flex align-items-center" style="margin-left: 10px;">
