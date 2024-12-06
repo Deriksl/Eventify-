@@ -291,7 +291,7 @@ h3 {
 }
 
 button {
-    background-color: transparent;
+    background-color: red;
     border: none;
     cursor: pointer;
     display: flex;

@@ -2,54 +2,87 @@
 
 @section('content')
     <div class="container">
-        <!-- Foto de perfil -->
-        <div class="profile-header">
-            <div class="profile-picture-container">
-                <img src="{{ asset('assets/img/web2.png') }}" alt="Profile Picture" class="profile-picture">
-                <button class="edit-button">
-                    <img src="{{ asset('assets/img/web1.png') }}" alt="Edit" class="edit-icon">
-                </button>
-            </div>
-        </div>
+        <h1>Perfil de Usuario</h1>
 
-        <!-- Información del perfil -->
-        <div class="profile-info">
-            <div class="form-group">
-                <input type="text" id="first-name" placeholder="Derik" readonly>
-                <button class="edit-icon" onclick="toggleEdit('first-name')">
-                    <img src="{{ asset('assets/img/web1.png') }}" alt="Edit">
-                </button>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
             </div>
+        @endif
+
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
             <div class="form-group">
-                <input type="text" id="last-name" placeholder="Salazar Lopez" readonly>
-                <button class="edit-icon" onclick="toggleEdit('last-name')">
-                    <img src="{{ asset('assets/img/web1.png') }}" alt="Edit">
-                </button>
+                <label for="name">Nombre</label>
+                <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" readonly>
             </div>
+
             <div class="form-group">
-                <input type="text" id="email" placeholder="email@example.com" readonly>
-                <button class="edit-icon" onclick="toggleEdit('email')">
-                    <img src="{{ asset('assets/img/web1.png') }}" alt="Edit">
-                </button>
+                <label for="lastname">Apellido</label>
+                <input type="text" name="lastname" id="lastname" class="form-control" value="{{ $user->lastname }}" readonly>
             </div>
+
             <div class="form-group">
-                <input type="text" id="phone" placeholder="123-456-7890" readonly>
-                <button class="edit-icon" onclick="toggleEdit('phone')">
-                    <img src="{{ asset('assets/img/web1.png') }}" alt="Edit">
-                </button>
+                <label for="email">Correo Electrónico</label>
+                <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" readonly>
             </div>
+
             <div class="form-group">
-                <input type="text" id="username" placeholder="Username" readonly>
-                <button class="edit-icon" onclick="toggleEdit('username')">
-                    <img src="{{ asset('assets/img/web1.png') }}" alt="Edit">
-                </button>
+                <label for="phone_number">Teléfono</label>
+                <input type="text" name="phone_number" id="phone_number" class="form-control" value="{{ $user->phone_number }}" readonly>
             </div>
+
             <div class="form-group">
-                <input type="password" id="password" placeholder="Password" readonly>
-                <button class="edit-icon" onclick="toggleEdit('password')">
-                    <img src="{{ asset('assets/img/web1.png') }}" alt="Edit">
-                </button>
+                <label for="username">Nombre de Usuario</label>
+                <input type="text" name="username" id="username" class="form-control" value="{{ $user->username }}" readonly>
             </div>
-        </div>
+
+            <div class="form-group">
+                <label for="profile_picture">Foto de Perfil</label>
+                <input type="file" name="profile_picture" id="profile_picture" class="form-control">
+            </div>
+
+            <div class="form-group" id="password-group" style="display: none;">
+                <label for="password">Nueva Contraseña</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Dejar en blanco si no desea cambiarla">
+            </div>
+
+            <div class="form-group" id="password_confirmation-group" style="display: none;">
+                <label for="password_confirmation">Confirmar Nueva Contraseña</label>
+                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Dejar en blanco si no desea cambiarla">
+            </div>
+
+            <button type="button" class="btn btn-link" onclick="toggleEdit()">Editar Información</button>
+            <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
+            <a href="{{ route('profile') }}" class="btn btn-secondary">Cancelar</a>
+        </form>
     </div>
+
+    <script>
+        function toggleEdit() {
+            const fields = ['name', 'lastname', 'email', 'phone_number', 'username'];
+            fields.forEach(field => {
+                const input = document.getElementById(field);
+                input.readOnly = !input.readOnly;
+
+                // Si el campo se vuelve editable, agregar un placeholder
+                if (!input.readOnly) {
+                    input.placeholder = "Por favor, complete este campo";
+                    input.focus();
+                } else {
+                    // Limpiar el placeholder cuando se vuelve no editable
+                    input.placeholder = "";
+                }
+            });
+
+            // Mostrar los campos de contraseña solo si se está editando
+            const passwordGroup = document.getElementById('password-group');
+            const passwordConfirmationGroup = document.getElementById('password_confirmation-group');
+            const isEditing = !document.getElementById('name').readOnly; // Verifica si se está editando
+
+            passwordGroup.style.display = isEditing ? 'block' : 'none';
+            passwordConfirmationGroup.style.display = isEditing ? 'block' : 'none';
+        }
+    </script>
 @endsection
