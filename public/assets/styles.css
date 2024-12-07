@@ -119,11 +119,12 @@ header a:hover {
 }
 
 .edit-button {
-    margin-top: -20px;
-    background-color: white;
+    margin-top: 10px; /* Ajusta el margen para ver si aparece correctamente */
+    background-color: red;
     border: none;
     cursor: pointer;
 }
+
 
 .profile-info .form-group {
     display: flex;
@@ -177,18 +178,12 @@ header a:hover {
 }
 
 .edit-button {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    background-color: white;
+    background-color: red;
     border: none;
-    border-radius: 50%;
-    padding: 5px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .edit-icon {
@@ -302,4 +297,11 @@ button {
 button img {
     width: 20px;
     height: 20px;
+}
+
+.button-container {
+    display: flex; /* Alinea los botones horizontalmente */
+    gap: 10px; /* Espacio entre los botones */
+    align-items: center; /* Centra verticalmente los botones */
+    justify-content: flex-start; /* Alinea los botones a la izquierda */
 }
