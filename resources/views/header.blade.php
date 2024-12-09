@@ -34,9 +34,14 @@
                 <a href="{{ route('myevents') }}" class="nav-link text-white" style="font-size: 18px; margin-right: 15px;">Tus eventos</a>
 
                 <!-- Icono de usuario -->
-                <a href="{{ route('profile') }}" class="nav-link d-flex align-items-center" style="margin-left: 10px;">
-                    <img src="{{ asset('assets/img/web2.png') }}" alt="User " style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
-                </a>
+                    @if(true)
+                        <a href="{{ route('profile') }}" class="nav-link d-flex align-items-center" style="margin-left: 10px;">
+                            <img src="{{ asset('assets/img/web3.png') }}" alt="User " style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
+                        </a>
+                    @else <a href="{{ route('profile') }}" class="nav-link d-flex align-items-center" style="margin-left: 10px;">
+                        <img src="{{ asset('assets/img/web2.png') }}" alt="User " style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
+                    </a>
+                    @endif
             </div>
         </div>
     </nav>

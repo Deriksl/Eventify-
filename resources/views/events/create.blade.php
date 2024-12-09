@@ -32,6 +32,11 @@
                 <input type="file" name="logo" class="form-control" id="logo">
             </div>
 
+            <div class="form-group">
+                <label for="ticket_price">Precio del Ticket</label>
+                <input type="number" name="ticket_price" class="form-control" id="ticket_price" step="0.01" required>
+            </div>
+
             <button type="submit" class="btn btn-primary">Crear Evento</button>
         </form>
     </div>

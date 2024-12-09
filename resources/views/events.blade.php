@@ -4,13 +4,14 @@
 
 @section('content')
     <div class="events-grid">
-        @for ($i = 1; $i <= 8; $i++)
+        @foreach($events as $event)
             <div class="event">
-                <img src="https://via.placeholder.com/150" alt="Event Image">
-                <h3>Evento {{ $i }}</h3>
-                <p>Organizador: Usuario {{ $i }}<br>Fecha: {{ now()->addDays($i)->format('Y-m-d') }}</p>
+                <img src="{{ $event->image_url }}" alt="Event Image">
+                <h3>{{ $event->name }}</h3>
+                <p>Organizador: {{ $event->organizer->name }}<br>Fecha: {{ $event->date }}</p>
+                <a href="{{ route('events.purchase', $event->id) }}" class="btn btn-primary">Comprar boletos</a>
             </div>
-        @endfor
+        @endforeach
     </div>
     <div class="pagination">
         @for ($i = 1; $i <= 10; $i++)

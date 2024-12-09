@@ -29,6 +29,14 @@
                 <input type="file" id="event-logo" class="form-control-file">
             </div>
 
+            <div class="form-group">
+                <label for="ticket_price">Precio del Ticket</label>
+                <input type="number" name="ticket_price" class="form-control" value="{{ $event->ticket_price }}" step="0.01" required>
+            </div>
+
+
+
+
             <!-- Botón para guardar cambios -->
             <button type="button" class="btn btn-success">Guardar Cambios</button>
         </form>

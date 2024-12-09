@@ -4,9 +4,82 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Laravel\Cashier\Billable;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
+use App\Models\Ticket; // Esto es lo correcto
+use Illuminate\Support\Str;
+
+
 
 class EventController extends Controller
 {
+    public function purchaseTicket(Request $request, Event $event)
+    {
+        if (is_null($event->price) || $event->price <= 0) {
+            return back()->withErrors('El precio del evento no está disponible o es inválido.');
+        }
+
+        // Configurar Stripe
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        // Asegúrate de que el monto sea válido (mayor que el mínimo)
+        $amount = max($event->price * 100, 50); // 50 centavos es el mínimo para USD
+
+        // Crear un PaymentIntent con Stripe
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $amount, // El precio del ticket en centavos
+            'currency' => 'usd', // O la moneda que estés usando
+            'metadata' => ['event_id' => $event->id],
+        ]);
+
+        // Guardar la compra del ticket si el pago es exitoso
+        $user = $request->user();
+
+        // Asumimos que el pago se ha realizado correctamente en el frontend
+        $ticket = Ticket::create([
+            'price' => $event->price, // Asegúrate de que $event->price tenga un valor válido
+            'purchase_date' => now(),
+            'ticket_code' => Str::random(10),
+            'status' => 'valid',
+            'user_id' => $user->id,
+            'event_id' => $event->id,
+        ]);
+
+        // Retornar el client secret para completar el pago en el frontend
+        return view('event.payment', [
+            'clientSecret' => $paymentIntent->client_secret,
+            'event' => $event,
+            'ticket' => $ticket
+        ]);
+    }
+
+
+    public function showTicket(Ticket $ticket)
+    {
+        // Asegúrate de que el ticket pertenece al usuario autenticado
+        if ($ticket->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para ver este ticket.');
+        }
+
+        return view('ticket.show', compact('ticket'));
+    }
+
+    public function useTicket(Ticket $ticket)
+    {
+        // Asegúrate de que el ticket pertenece al usuario autenticado
+        if ($ticket->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para usar este ticket.');
+        }
+
+        // Cambiar el estado a 'usado'
+        $ticket->update(['status' => 'used']);
+
+        return redirect()->route('tickets.show', $ticket)->with('message', 'Ticket usado correctamente.');
+    }
+
+
+
     public function index()
     {
         // Obtener los eventos con paginación
@@ -41,28 +114,20 @@ class EventController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'location' => 'required|string|max:255',
+            'description' => 'required',
+            'location' => 'required|string',
             'date' => 'required|date',
-            'logo' => 'nullable|image|max:1024',
+            'ticket_price' => 'required|numeric|min:0',
         ]);
 
-        $event = new Event();
-        $event->name = $validated['name'];
-        $event->description = $validated['description'];
-        $event->location = $validated['location'];
-        $event->date = $validated['date'];
-        $event->status = 'upcoming';
-        $event->user_id = auth()->id();
+        $validated['user_id'] = auth()->id();
+        $validated['logo'] = $request->hasFile('logo') ? $request->file('logo')->store('logos', 'public') : null;
 
-        if ($request->hasFile('logo')) {
-            $event->logo = $request->file('logo')->store('logos', 'public');
-        }
+        Event::create($validated);
 
-        $event->save();
-
-        return redirect()->route('myevents')->with('success', 'Evento creado exitosamente.');
+        return redirect()->route('events.index')->with('success', 'Evento creado con éxito.');
     }
+
 
     // Método para editar un evento
     public function edit($id)
@@ -81,6 +146,7 @@ class EventController extends Controller
             'date' => 'required|date',
             'status' => 'required|max:255',
             'logo' => 'nullable|image|max:2048',
+            'ticket_price' => 'required|numeric|min:0',
         ]);
 
         $event = Event::findOrFail($id);
@@ -103,6 +169,7 @@ class EventController extends Controller
         return redirect()->route('myevents')->with('success', 'Evento actualizado exitosamente.');
     }
 
+
     // Método para eliminar un evento
     public function destroy($id)
     {
@@ -111,4 +178,15 @@ class EventController extends Controller
 
         return redirect()->route('myevents')->with('success', 'Evento eliminado exitosamente.');
     }
+
+
+    public function show($id)
+    {
+        $event = Event::with('user')->findOrFail($id); // Asegúrate de cargar las relaciones necesarias
+        return view('events.show', compact('event'));  // Pasa los datos del evento a la vista
+    }
+
+
+
 }
+

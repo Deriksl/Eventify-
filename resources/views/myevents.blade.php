@@ -20,6 +20,8 @@
                         <p><strong>Descripción:</strong> {{ $event->description }}</p>
                         <p><strong>Ubicación:</strong> {{ $event->location }}</p>
                         <p><strong>Fecha:</strong> {{ $event->date }}</p>
+                        <p><strong>Precio del Ticket:</strong> ${{ number_format($event->ticket_price, 2) }}</p>
+
 
                         <!-- Mostrar imagen/logo si existe -->
                         @if($event->logo)

@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use App\Http\Controllers\EventController;
+use App\Models\Event;
+use App\Http\Controllers\TicketController;
 
 Auth::routes();
 
@@ -47,6 +49,7 @@ Route::post('register', [RegisterController::class, 'register']);
 // login
 
 use App\Http\Controllers\Auth\LoginController;
+use Laravel\Cashier\Http\Controllers\WebhookController;
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -90,3 +93,18 @@ Route::middleware('auth')->group(function () {
 
 // eventos en home
 Route::get('/', [EventController::class, 'index']); // Ruta para la página de inicio
+Route::get('/', [EventController::class, 'index'])->name('home');
+
+
+
+// detalles de eventos
+Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+
+
+// payments
+Route::post('/purchase/{event}', [EventController::class, 'purchaseTicket'])->name('purchase.ticket');
+Route::get('/tickets/{ticket}', [EventController::class, 'showTicket'])->name('tickets.show');
+
+
+Route::get('/events/{id}/purchase', [TicketController::class, 'showPurchaseForm'])->name('events.purchase');
+Route::post('/events/{id}/purchase', [TicketController::class, 'processPurchase'])->name('events.purchase.process');

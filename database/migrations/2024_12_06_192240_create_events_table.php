@@ -14,17 +14,19 @@ class CreateEventsTable extends Migration
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id(); // Crea la columna 'id' como PRIMARY KEY
-            $table->string('name'); // Crea la columna 'name' de tipo varchar
-            $table->text('description'); // Crea la columna 'description' de tipo text
-            $table->string('location'); // Crea la columna 'location' de tipo varchar
-            $table->dateTime('date'); // Crea la columna 'date' de tipo datetime
-            $table->binary('logo')->nullable(); // Crea la columna 'logo' de tipo blob, nullable
-            $table->string('status')->nullable(); // Crea la columna 'status' de tipo varchar, nullable
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Referencia al usuario que crea el evento
-            $table->timestamps(); // Crea las columnas 'created_at' y 'updated_at'
+            $table->id();
+            $table->string('name');
+            $table->text('description');
+            $table->string('location');
+            $table->dateTime('date');
+            $table->binary('logo')->nullable();
+            $table->string('status')->nullable();
+            $table->decimal('ticket_price', 8, 2)->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
+
 
 
     /**

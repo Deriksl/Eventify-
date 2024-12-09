@@ -11,14 +11,9 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'description',
-        'location',
-        'date',
-        'logo',
-        'status',
-    ];
+    protected $fillable = ['name', 'description', 'location', 'date', 'ticket_price', 'user_id', 'logo'];
+
+
 
     // Relación entre Evento y Usuario (un evento pertenece a un usuario)
     public function user()

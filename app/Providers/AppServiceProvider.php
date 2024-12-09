@@ -3,12 +3,14 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
+
     public function register(): void
     {
         //
@@ -17,8 +19,9 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot()
     {
-        //
+        // Calcula impuestos automáticamente (opcional)
+        Cashier::calculateTaxes();
     }
 }
