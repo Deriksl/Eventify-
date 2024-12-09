@@ -93,15 +93,20 @@ class EventController extends Controller
 
     public function myevents()
     {
-        // Obtener los eventos creados por el usuario
-        $createdEvents = Event::where('user_id', auth()->id())->get();
+        $user = auth()->user(); // Obtener al usuario autenticado
 
-        // Obtener los eventos a los que el usuario asiste
-        $attendingEvents = auth()->user()->attendingEvents()->get();
+        // Obtener los eventos a los que el usuario ha asistido o asistirá
+        $attendingEvents = Ticket::where('user_id', $user->id)
+            ->with('event') // Relacionar con el evento
+            ->get()
+            ->pluck('event'); // Obtener solo los eventos
 
-        // Pasar los eventos a la vista
-        return view('myevents', compact('createdEvents', 'attendingEvents'));
+        // Obtener los eventos creados por el usuario (si es necesario)
+        $createdEvents = Event::where('user_id', $user->id)->get();
+
+        return view('myevents', compact('attendingEvents', 'createdEvents'));
     }
+
 
     // Método para mostrar el formulario de creación de evento
     public function create()

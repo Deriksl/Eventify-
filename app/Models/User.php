@@ -24,8 +24,14 @@ class User extends Authenticatable
 
     public function attendingEvents()
     {
-        return $this->belongsToMany(Event::class, 'event_user', 'user_id', 'event_id');
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('created_at');
     }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
 
 }
 

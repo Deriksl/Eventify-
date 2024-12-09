@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Http\Controllers\EventController;
 use App\Models\Event;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\PurchaseController;
 
 Auth::routes();
 
@@ -108,3 +109,13 @@ Route::get('/tickets/{ticket}', [EventController::class, 'showTicket'])->name('t
 
 Route::get('/events/{id}/purchase', [TicketController::class, 'showPurchaseForm'])->name('events.purchase');
 Route::post('/events/{id}/purchase', [TicketController::class, 'processPurchase'])->name('events.purchase.process');
+
+// purchahes
+Route::post('/purchase/{event}', [PurchaseController::class, 'purchaseTicket'])->name('purchase.ticket');
+Route::get('/payment/success', [PurchaseController::class, 'success'])->name('payment.success');
+Route::get('/payment/cancel', [PurchaseController::class, 'cancel'])->name('payment.cancel');
+
+// registro de compras
+
+Route::get('/event/{event_id}/purchase', [PurchaseController::class, 'success']);
+Route::get('/myevents', [EventController::class, 'myevents'])->name('myevents');

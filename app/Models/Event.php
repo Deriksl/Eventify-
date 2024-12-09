@@ -12,6 +12,12 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'description', 'location', 'date', 'ticket_price', 'user_id', 'logo'];
+    protected $casts = [
+        'date' => 'datetime',
+        'ticket_price' => 'decimal:2',
+    ];
+
+
 
 
 
@@ -24,6 +30,7 @@ class Event extends Model
     // Relación muchos a muchos con los usuarios que asisten al evento
     public function attendees()
     {
-        return $this->belongsToMany(User::class, 'event_user', 'event_id', 'user_id');
+        return $this->belongsToMany(User::class, 'event_user', 'event_id', 'user_id')
+            ->withTimestamps();
     }
 }

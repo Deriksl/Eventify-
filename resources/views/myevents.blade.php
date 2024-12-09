@@ -27,8 +27,17 @@
                         @if($event->logo)
                             <div class="mb-3">
                                 <strong>Logo:</strong>
-                                <img src="data:image/jpeg;base64,{{ base64_encode($event->logo) }}" alt="Logo del evento" class="img-fluid" style="max-height: 100px;">
+                                <img src="{{ asset('storage/' . $event->logo) }}" alt="Logo del evento">
                             </div>
+
+                            <div class="form-group">
+                                <label for="name">Nombre:</label>
+                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror">
+                                @error('name')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+
                         @endif
 
                         <!-- Botón para editar el evento -->
@@ -84,11 +93,24 @@
                     <div class="event border p-3 mb-3">
                         <p><strong>Estado:</strong> {{ $event->status }}</p>
                         <p><strong>Nombre:</strong> {{ $event->name }}</p>
+                        <p><strong>Descripción:</strong> {{ $event->description }}</p>
+                        <p><strong>Ubicación:</strong> {{ $event->location }}</p>
+                        <p><strong>Fecha:</strong> {{ $event->date }}</p>
+                        <p><strong>Precio del Ticket:</strong> ${{ number_format($event->ticket_price, 2) }}</p>
+
+                        <!-- Mostrar imagen/logo si existe -->
+                        @if($event->logo)
+                            <div class="mb-3">
+                                <strong>Logo:</strong>
+                                <img src="{{ asset('storage/' . $event->logo) }}" alt="Logo del evento">
+                            </div>
+                        @endif
                     </div>
                 @empty
                     <p>No estás inscrito en ningún evento.</p>
                 @endforelse
             </div>
+
         </div>
     </div>
 
