@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\registermail;
 use App\Models\User;
+use App\Notifications\WelcomeEmailNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -28,6 +31,7 @@ class RegisterController extends Controller
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -48,9 +52,19 @@ class RegisterController extends Controller
         }
 
         // Guardar el usuario en la base de datos
+// Guardar el usuario en la base de datos
         $user->save();
 
-        // Redirigir o mostrar un mensaje de éxito
-        return redirect()->route('login')->with('success', 'Registro exitoso. Puedes iniciar sesión.');
+// Enviar correo o notificación
+        Mail::to($user->email)->send(new registermail($user)); // Pasar el usuario al Mailable
+// O
+        $user->notify(new WelcomeEmailNotification()); // Si usas Notification
+
+// Redirigir o mostrar un mensaje de éxito
+        return redirect()->route('login')->with('success', 'Registro exitoso. Revisa tu correo para más información.');
+
+
+
+
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\registermail;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Cashier\Billable;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;

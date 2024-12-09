@@ -14,34 +14,35 @@
 
                 @forelse($createdEvents as $event)
                     <div class="event border p-3 mb-3">
-                        <!-- Mostrar todos los datos del evento -->
-                        <p><strong>Estado:</strong> {{ $event->status }}</p>
-                        <p><strong>Nombre:</strong> {{ $event->name }}</p>
-                        <p><strong>Descripción:</strong> {{ $event->description }}</p>
-                        <p><strong>Ubicación:</strong> {{ $event->location }}</p>
-                        <p><strong>Fecha:</strong> {{ $event->date }}</p>
-                        <p><strong>Precio del Ticket:</strong> ${{ number_format($event->ticket_price, 2) }}</p>
-
-
                         <!-- Mostrar imagen/logo si existe -->
                         @if($event->logo)
-                            <div class="mb-3">
-                                <strong>Logo:</strong>
-                                <img src="{{ asset('storage/' . $event->logo) }}" alt="Logo del evento">
+                            <div class="event-image mb-3">
+                                <img src="{{ asset('storage/' . $event->logo) }}" alt="Logo del evento" class="img-fluid">
                             </div>
-
-                            <div class="form-group">
-                                <label for="name">Nombre:</label>
-                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror">
-                                @error('name')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
-                            </div>
-
                         @endif
 
-                        <!-- Botón para editar el evento -->
-                        <button class="btn btn-warning edit-button" onclick="showEditForm({{ $event->id }})">Editar</button>
+                        <!-- Detalles del evento -->
+                        <div class="event-details">
+                            <p><strong>Estado:</strong> {{ $event->status }}</p>
+                            <p><strong>Nombre:</strong> {{ $event->name }}</p>
+                            <p><strong>Descripción:</strong> {{ $event->description }}</p>
+                            <p><strong>Ubicación:</strong> {{ $event->location }}</p>
+                            <p><strong>Fecha:</strong> {{ $event->date }}</p>
+                            <p><strong>Precio del Ticket:</strong> ${{ number_format($event->ticket_price, 2) }}</p>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="event-actions d-flex justify-content-center mt-3">
+                            <!-- Botón para editar -->
+                            <button class="btn btn-warning mx-2 edit-button" onclick="showEditForm({{ $event->id }})">Editar</button>
+
+                            <!-- Botón para eliminar -->
+                            <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger mx-2">Eliminar</button>
+                            </form>
+                        </div>
 
                         <!-- Formulario de edición (oculto por defecto) -->
                         <div id="edit-form-{{ $event->id }}" class="edit-form mt-3" style="display: none;">
@@ -49,6 +50,7 @@
                                 @csrf
                                 @method('PUT')
 
+                                <!-- Campos del formulario -->
                                 <div class="form-group">
                                     <label for="name-{{ $event->id }}">Nombre:</label>
                                     <input type="text" id="name-{{ $event->id }}" name="name" value="{{ $event->name }}" class="form-control">
@@ -70,21 +72,18 @@
                                     <input type="text" id="status-{{ $event->id }}" name="status" value="{{ $event->status }}" class="form-control">
                                 </div>
 
-                                <button type="submit" class="btn btn-success">Guardar cambios</button>
-                                <button type="button" class="btn btn-secondary" onclick="cancelEdit({{ $event->id }})">Cancelar</button>
+                                <!-- Botones del formulario -->
+                                <div class="text-center mt-3">
+                                    <button type="submit" class="btn btn-success">Guardar cambios</button>
+                                    <button type="button" class="btn btn-secondary" onclick="cancelEdit({{ $event->id }})">Cancelar</button>
+                                </div>
                             </form>
                         </div>
-
-                        <!-- Botón para eliminar -->
-                        <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="mt-3">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                        </form>
                     </div>
                 @empty
                     <p>No has creado ningún evento.</p>
                 @endforelse
+
             </div>
 
             <div class="events-column">
