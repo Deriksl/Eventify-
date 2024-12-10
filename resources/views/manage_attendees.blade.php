@@ -1,14 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container my-4">
-        <div class="text-center mb-4">
-            <h1 class="text-primary">Gestión de Asistentes para el Evento <span class="text-success">{{ $event->name }}</span></h1>
-        </div>
+    <div class="container">
+        <h1>Gestión de Asistentes para el Evento {{ $event->name }}</h1>
 
-        <h3 class="text-secondary mb-3">Lista de Asistentes</h3>
-        <table class="table table-bordered table-striped shadow-sm">
-            <thead class="bg-purple text-white">
+        <h3>Lista de Asistentes</h3>
+        <table class="table">
+            <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Correo Electrónico</th>
@@ -21,12 +19,12 @@
                 <tr>
                     <td>{{ $attendee->user->name }}</td>
                     <td>{{ $attendee->user->email }}</td>
-                    <td class="text-center">{{ $attendee->status }}</td>
-                    <td class="text-center">
+                    <td>{{ $attendee->status }}</td>
+                    <td>
                         <form action="{{ route('attendees.destroy', $attendee->id) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm btn-hover">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
                     </td>
                 </tr>
