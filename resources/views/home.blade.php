@@ -4,16 +4,17 @@
 
 @section('content')
 
-    <h1 class="page-title">Eventos</h1>
+    <h1 class="page-title text-center">Eventos</h1>
+
     <div class="events-grid">
         @foreach ($events as $event)
             <div class="event">
                 <a href="{{ route('events.show', $event->id) }}" class="event-link">
                     <div class="event-logo">
                         @if ($event->logo)
-                            <img src="{{ asset('storage/' . $event->logo) }}" alt="Event Logo">
+                            <img src="{{ asset('storage/' . $event->logo) }}" alt="Event Logo" class="event-logo-img">
                         @else
-                            <img src="{{ asset('images/default-logo.png') }}" alt="Default Logo">
+                            <img src="{{ asset('images/default-logo.png') }}" alt="Default Logo" class="event-logo-img">
                         @endif
                     </div>
                     <div class="event-details">
@@ -28,9 +29,8 @@
         @endforeach
     </div>
 
-
-    <!-- Paginación -->
-    <div class="pagination">
+    <div class="pagination text-center">
         {{ $events->links() }}
     </div>
+
 @endsection

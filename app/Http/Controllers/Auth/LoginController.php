@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class LoginController extends Controller
 {
@@ -48,25 +50,31 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+
         // Validar las credenciales
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
+        // Log de las credenciales
+        Log::info('Credenciales recibidas: ', $credentials);
+
         // Intentar autenticar al usuario
         if (Auth::attempt($credentials)) {
-            // Regenerar la sesión para evitar ataques de fijación de sesión
             $request->session()->regenerate();
-
-            // Redirigir al usuario a la ruta deseada
             return redirect()->intended($this->redirectTo);
         }
 
-        // Si las credenciales son incorrectas, redirigir de vuelta con un error
         return back()->withErrors([
             'email' => 'Las credenciales proporcionadas no coinciden con nuestros registros.',
         ])->onlyInput('email');
+    }
+
+// LoginController.php
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect()->route('home');
     }
 
     /**

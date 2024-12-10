@@ -10,6 +10,16 @@
             </div>
         @endif
 
+        <div class="profile-header text-center">
+            <div class="profile-picture-container">
+                @if(Auth::check() && Auth::user()->profile_picture) <!-- Verifica si el usuario tiene una foto de perfil -->
+                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Foto de perfil" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+                @else
+                    <img src="{{ asset('assets/img/default-profile.png') }}" alt="Foto de perfil predeterminada" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+                @endif
+            </div>
+        </div>
+
         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
@@ -55,7 +65,11 @@
 
             <button type="button" class="btn btn-link" onclick="toggleEdit()">Editar Información</button>
             <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
-            <a href="{{ route('profile') }}" class="btn btn-secondary">Cancelar</a>
+
+            <!-- Contenedor para los botones -->
+            <div class="buttons-container" style="margin-top: 20px;">
+                <a href="{{ route('profile') }}" class="btn btn-secondary">Cancelar</a>
+            </div>
         </form>
     </div>
 
@@ -77,7 +91,7 @@
             });
 
             // Mostrar los campos de contraseña solo si se está editando
-            const passwordGroup = document.getElementById('password-group');
+            const passwordGroup = document.getElementById(' password-group');
             const passwordConfirmationGroup = document.getElementById('password_confirmation-group');
             const isEditing = !document.getElementById('name').readOnly; // Verifica si se está editando
 

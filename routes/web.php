@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -14,23 +15,11 @@ use App\Http\Controllers\PurchaseController;
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
-
-Route::get('/', function () {
-    return view('home'); // Página inicial
-});
-
-
+Route::get('/home', [EventController::class, 'index'])->middleware('auth');
 
 Route::get('/profile', function () {
     return view('profile');
 })->name('profile');
-
-Route::get('/myevents', function () {
-    return view('myevents');
-})->name('myevents');
 
 Route::get('/editmyevent', function () {
     return view('editmyevent');
@@ -93,8 +82,10 @@ Route::middleware('auth')->group(function () {
 
 
 // eventos en home
-Route::get('/', [EventController::class, 'index']); // Ruta para la página de inicio
+
 Route::get('/', [EventController::class, 'index'])->name('home');
+// web.php
+
 
 
 
@@ -119,3 +110,8 @@ Route::get('/payment/cancel', [PurchaseController::class, 'cancel'])->name('paym
 
 Route::get('/event/{event_id}/purchase', [PurchaseController::class, 'success']);
 Route::get('/myevents', [EventController::class, 'myevents'])->name('myevents');
+
+// Rutas para gestionar asistentes
+Route::get('/events/{eventId}/attendees', [AttendeeController::class, 'manage'])->name('attendees.manage');
+Route::delete('/attendees/{id}', [AttendeeController::class, 'destroy'])->name('attendees.destroy');
+

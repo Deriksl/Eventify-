@@ -4,6 +4,11 @@
     <div class="container">
         <div class="profile-header">
             <div class="profile-picture-container">
+                @if(Auth::check() && Auth::user()->profile_picture) <!-- Verifica si el usuario tiene una foto de perfil -->
+                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Foto de perfil" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                @else
+                    <img src="{{ asset('assets/img/default-profile.png') }}" alt="Foto de perfil predeterminada" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                @endif
             </div>
         </div>
 
@@ -33,6 +38,9 @@
 
                         <!-- Botones de acción -->
                         <div class="event-actions d-flex justify-content-center mt-3">
+                            <!-- Botón para gestionar asistentes -->
+                            <button class="btn btn-info mx-2" onclick="window.location.href='{{ route('attendees.manage', $event->id) }}'">Gestionar Asistentes</button>
+
                             <!-- Botón para editar -->
                             <button class="btn btn-warning mx-2 edit-button" onclick="showEditForm({{ $event->id }})">Editar</button>
 
@@ -65,7 +73,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="date-{{ $event->id }}">Fecha:</label>
-                                    <input type="datetime-local" id="date-{{ $event->id }}" name="date" value="{{ date('Y-m-d\TH:i', strtotime($event->date)) }}" class="form-control">
+                                    <input type="datetime-local" id="date-{{ $event->id }}" name="date" value="{{ date('Y -m-d\TH:i', strtotime($event->date)) }}" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label for="status-{{ $event->id }}">Estado:</label>
@@ -90,18 +98,19 @@
                 <h3>Eventos a los que irás o ya fuiste</h3>
                 @forelse($attendingEvents as $event)
                     <div class="event border p-3 mb-3">
-                        <p><strong>Estado:</strong> {{ $event->status }}</p>
-                        <p><strong>Nombre:</strong> {{ $event->name }}</p>
-                        <p><strong>Descripción:</strong> {{ $event->description }}</p>
-                        <p><strong>Ubicación:</strong> {{ $event->location }}</p>
-                        <p><strong>Fecha:</strong> {{ $event->date }}</p>
-                        <p><strong>Precio del Ticket:</strong> ${{ number_format($event->ticket_price, 2) }}</p>
+                        <div class="event-details">
+                            <p><strong>Estado:</strong> {{ $event->status }}</p>
+                            <p><strong>Nombre:</strong> {{ $event->name }}</p>
+                            <p><strong>Descripción:</strong> {{ $event->description }}</p>
+                            <p><strong>Ubicación:</strong> {{ $event->location }}</p>
+                            <p><strong>Fecha:</strong> {{ $event->date }}</p>
+                            <p><strong>Precio del Ticket:</strong> ${{ number_format($event->ticket_price, 2) }}</p>
+                        </div>
 
                         <!-- Mostrar imagen/logo si existe -->
                         @if($event->logo)
-                            <div class="mb-3">
-                                <strong>Logo:</strong>
-                                <img src="{{ asset('storage/' . $event->logo) }}" alt="Logo del evento">
+                            <div class="event-image mb-3">
+                                <img src="{{ asset('storage/' . $event->logo) }}" alt="Logo del evento" class="event-logo">
                             </div>
                         @endif
                     </div>
@@ -109,26 +118,25 @@
                     <p>No estás inscrito en ningún evento.</p>
                 @endforelse
             </div>
-
         </div>
+
+        <script>
+            // Función para mostrar el formulario de edición
+            function showEditForm(eventId) {
+                // Ocultamos todos los formularios de edición
+                let forms = document.querySelectorAll('.edit-form');
+                forms.forEach(function (form) {
+                    form.style.display = 'none';
+                });
+
+                // Mostramos el formulario del evento seleccionado
+                document.getElementById('edit-form-' + eventId).style.display = 'block';
+            }
+
+            // Función para cancelar la edición
+            function cancelEdit(eventId) {
+                document.getElementById('edit-form-' + eventId).style.display = 'none';
+            }
+        </script>
     </div>
-
-    <script>
-        // Función para mostrar el formulario de edición
-        function showEditForm(eventId) {
-            // Ocultamos todos los formularios de edición
-            let forms = document.querySelectorAll('.edit-form');
-            forms.forEach(function (form) {
-                form.style.display = 'none';
-            });
-
-            // Mostramos el formulario del evento seleccionado
-            document.getElementById('edit-form-' + eventId).style.display = 'block';
-        }
-
-        // Función para cancelar la edición
-        function cancelEdit(eventId) {
-            document.getElementById('edit-form-' + eventId).style.display = 'none';
-        }
-    </script>
 @endsection

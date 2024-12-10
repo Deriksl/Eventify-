@@ -34,14 +34,15 @@
                 <a href="{{ route('myevents') }}" class="nav-link text-white" style="font-size: 18px; margin-right: 15px;">Tus eventos</a>
 
                 <!-- Icono de usuario -->
-                    @if(true)
-                        <a href="{{ route('profile') }}" class="nav-link d-flex align-items-center" style="margin-left: 10px;">
-                            <img src="{{ asset('assets/img/web3.png') }}" alt="User " style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
-                        </a>
-                    @else <a href="{{ route('profile') }}" class="nav-link d-flex align-items-center" style="margin-left: 10px;">
-                        <img src="{{ asset('assets/img/web2.png') }}" alt="User " style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
+                @if(Auth::check() && Auth::user()->profile_picture) <!-- Verifica si el usuario tiene una foto de perfil -->
+                <a href="{{ route('profile') }}" class="nav-link d-flex align-items-center" style="margin-left: 10px;">
+                    <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="User " style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
+                </a>
+                @else
+                    <a href="{{ route('profile') }}" class="nav-link d-flex align-items-center" style="margin-left: 10px;">
+                        <img src="{{ asset('assets/img/default-profile.png') }}" alt="User " style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
                     </a>
-                    @endif
+                @endif
             </div>
         </div>
     </nav>

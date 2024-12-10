@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,26 +13,26 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('lastname'); // Apellido del usuario
-            $table->string('phone_number'); // Número de teléfono
-            $table->string('username')->unique(); // Nombre de usuario único
+            $table->string('lastname');
+            $table->string('phone_number', 15)->nullable(); // Limitar el tamaño del número de teléfono
+            $table->string('username')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('profile_picture')->nullable(); // Ruta de la foto de perfil
+            $table->text('profile_picture')->nullable(); // Usar text si las rutas son largas
             $table->rememberToken();
             $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->string('email')->unique(); // Un único token por email
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
         Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->uuid('id')->primary(); // Usar UUID para identificadores únicos
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade')->index(); // Relación con usuarios
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

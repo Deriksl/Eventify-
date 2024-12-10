@@ -27,11 +27,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('created_at');
     }
 
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
-
+    // Esto es importante para autenticar usando el correo y la contraseña
+    //public function setPasswordAttribute($value)
+    //{
+        //$this->attributes['password'] = bcrypt($value);  // Esto no es necesario si ya usas Hash::make
+    //}
 
 }
 

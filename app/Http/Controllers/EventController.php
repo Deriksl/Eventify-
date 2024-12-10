@@ -84,10 +84,10 @@ class EventController extends Controller
 
     public function index()
     {
-        // Obtener los eventos con paginación
-        $events = Event::with('user')->paginate(10);  // Cambié 'get()' por 'paginate(10)'
+        // Obtener los eventos (ajusta la lógica según lo que necesites)
+        $events = Event::paginate(10); // O la lógica que necesites
 
-        // Pasar los eventos a la vista
+        // Retornar la vista pasando la variable $events
         return view('home', compact('events'));
     }
 
@@ -153,17 +153,13 @@ class EventController extends Controller
             'date' => 'required|date',
             'status' => 'required|max:255',
             'logo' => 'nullable|image|max:2048',
-            'ticket_price' => 'required|numeric|min:0',
         ]);
 
         $event = Event::findOrFail($id);
-
-        // Actualizar campos
         $event->update($validated);
 
         // Manejo del logo
         if ($request->hasFile('logo')) {
-            // Eliminar el logo viejo si es necesario
             if ($event->logo) {
                 \Storage::delete('public/' . $event->logo);
             }
