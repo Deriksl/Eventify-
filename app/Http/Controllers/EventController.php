@@ -185,10 +185,9 @@ class EventController extends Controller
 
     public function show($id)
     {
-        $event = Event::with('user')->findOrFail($id); // Asegúrate de cargar las relaciones necesarias
-        return view('events.show', compact('event'));  // Pasa los datos del evento a la vista
+        $event = Event::with(['user', 'comments.user'])->findOrFail($id); // Cargar comentarios y el usuario que los hizo
+        return view('events.show', compact('event'));
     }
-
 
 
 }

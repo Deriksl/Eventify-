@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendeeController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -115,3 +116,5 @@ Route::get('/myevents', [EventController::class, 'myevents'])->name('myevents');
 Route::get('/events/{eventId}/attendees', [AttendeeController::class, 'manage'])->name('attendees.manage');
 Route::delete('/attendees/{id}', [AttendeeController::class, 'destroy'])->name('attendees.destroy');
 
+//coments
+Route::post('/events/{event}/comments', [CommentController::class, 'store'])->name('comments.store');

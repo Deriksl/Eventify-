@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/Event.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,10 +15,6 @@ class Event extends Model
         'ticket_price' => 'decimal:2',
     ];
 
-
-
-
-
     // Relación entre Evento y Usuario (un evento pertenece a un usuario)
     public function user()
     {
@@ -32,5 +26,11 @@ class Event extends Model
     {
         return $this->belongsToMany(User::class, 'event_user', 'event_id', 'user_id')
             ->withTimestamps();
+    }
+
+    // Relación uno a muchos con los comentarios
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }
