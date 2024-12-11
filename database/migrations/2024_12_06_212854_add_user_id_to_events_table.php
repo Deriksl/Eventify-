@@ -6,20 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Esto crea la columna user_id con una relación de clave foránea
+            if (!Schema::hasColumn('events', 'user_id')) {
+                $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            }
         });
     }
 
     public function down()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            $table->dropForeign(['user_id']); // Primero elimina la clave foránea
+            $table->dropColumn('user_id');    // Luego elimina la columna
         });
     }
 };
+
