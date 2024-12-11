@@ -40,7 +40,7 @@ class EventController extends Controller
 
         // Asumimos que el pago se ha realizado correctamente en el frontend
         $ticket = Ticket::create([
-            'price' => $event->price, // Asegúrate de que $event->price tenga un valor válido
+            'price' => $request->has('price') ? $request->price : null,
             'purchase_date' => now(),
             'ticket_code' => Str::random(10),
             'status' => 'valid',

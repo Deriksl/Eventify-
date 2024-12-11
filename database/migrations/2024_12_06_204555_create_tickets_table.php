@@ -12,7 +12,7 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->decimal('ticket_price', 8, 2)->nullable(); // Asegúrate de que pueda ser nulo
+            $table->decimal('price', 8, 2)->nullable();
             $table->timestamp('purchase_date'); // Fecha de compra
             $table->string('ticket_code')->unique(); // Código del ticket
             $table->string('status'); // Estado del ticket, e.g., 'valid', 'used'

@@ -37,6 +37,7 @@ Route::get('/dashboard', function () {
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
+
 // login
 
 use App\Http\Controllers\Auth\LoginController;
@@ -67,7 +68,7 @@ Route::get('/events/create', [EventController::class, 'create'])->name('events.c
 // Ruta para almacenar el evento
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
 // Ruta para mostrar el formulario de edición de un evento
-
+Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
 
 // Ruta para eliminar un evento
 Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');

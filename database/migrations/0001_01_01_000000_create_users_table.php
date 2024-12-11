@@ -32,13 +32,17 @@ return new class extends Migration {
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->uuid('id')->primary(); // Usar UUID para identificadores únicos
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade')->index(); // Relación con usuarios
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
+
         });
+
+
     }
+
 
     /**
      * Reverse the migrations.
